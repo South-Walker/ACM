@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace _2017_2_22
 {
@@ -12,8 +13,14 @@ namespace _2017_2_22
         static int times = 0;
         static void Main(string[] args)
         {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
             Console.WriteLine(totaltimes(1, 10) / 10);
+            sw.Stop();
+            TimeSpan ts = sw.Elapsed;
+            Console.WriteLine(ts.TotalMilliseconds);
             Console.Read();
+
         }
 
         static int totaltimes(int begin,int num)

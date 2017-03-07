@@ -11,7 +11,7 @@ namespace _2017_3_6
         static void Main(string[] args)
         {
             //11059
-
+            /*
             System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
             stopwatch.Start();
 
@@ -43,10 +43,10 @@ namespace _2017_3_6
             stopwatch.Stop();
             Console.WriteLine(stopwatch.Elapsed.TotalSeconds);
             Console.WriteLine("The maximum product is " + max.ToString());
-            Console.ReadLine();
+            Console.ReadLine();*/
             //725
             #region
-            /*   int input = 61;
+               int input = 4;
                int numeral;
                bool is_found = false;
                for (int i = 1234; i <= 49876; i++)
@@ -63,7 +63,7 @@ namespace _2017_3_6
                    Console.WriteLine("no solutions");
                }
                is_found = false;
-               Console.Read();*/
+               Console.Read();
             #endregion
 
         }

@@ -9,8 +9,7 @@ namespace _2017_3_7
 {
     class Program
     {
-        static string a = "";
-        static int[] int_array = { 1, 2, 3, 4 };
+        static int[] int_array = { 1, 2};
         static void Main(string[] args)
         {
             //10976
@@ -42,7 +41,7 @@ namespace _2017_3_7
             //枚举集合中所有子集，按字典序排列，递归实现（C#）
             #region
             SortArray(int_array);//数组由小到大排序
-            Print(int_array);
+            Print(new int[4], 0);
             Console.ReadLine();
             #endregion
         }
@@ -54,25 +53,61 @@ namespace _2017_3_7
         {
             //排序数组
         }
-        static void Print(int[] array)
+        static void Print(int[]array, int now)
         {
-            for (int i = 0; i < array.Length; i++)
+            //递归边界
+            if (now == int_array.Length) 
             {
-                if (a.Length == array.Length) 
+                foreach (int num in array)
                 {
-                    Console.WriteLine(a);
-                    a = "";
-                    continue;
+                    Console.Write(num);
                 }
-                if (array[i] == 0) 
-                {
-                    continue;
-                }
-                a += array[i];
-                int[] temp = array;
-                temp[i] = 0;
-                Print(temp);
+                Console.WriteLine();
             }
+            else
+            {
+                for (int i = 0; i < int_array.Length; i++)
+                {
+                    if (sRepeat(array, i))
+                    {
+                        array[now] = int_array[i];
+                        Console.Write(array[now]);
+                        Print(array, now + 1);
+                    }
+                }
+            }
+        }
+        static bool IsRepeat(int[] a,int i)
+        {
+            int times = 0; 
+            foreach(int num in a)
+            {
+                if (int_array[i] == num)
+                {
+                    times++;
+                }
+            }
+            for (int k = 0; k < a.Length; k++)
+            {
+                if (a[k] == int_array[i]) 
+                {
+                    times--;
+                }
+            }
+            if (times > 0) 
+                return true;
+            return false;
+        }
+        static bool sRepeat(int[]a,int i)
+        {
+            foreach(int y in a)
+            {
+                if (y == int_array[i])
+                {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }

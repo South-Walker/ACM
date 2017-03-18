@@ -8,33 +8,49 @@ namespace uva1353
 {
     class Program
     {
-        static double r = 1.7143;
-        static int s = 4;
-        static int[] sarray = { 1, 2, 3, 5 };//output should be about 1.7142857
+        static double r = 2;
+        static int s = 3;
+        static int[] sarray = { 1, 2, 1 };//output should be about 1.7142857
         static int[] tree = new int[100];
         static bool[] is_used = new bool[sarray.Length];
-        static int max = 0;
-        static int totalweight = 0;
+        static double max = 0;
         static void Main(string[] args)
         {
-            foreach(int i in sarray)
-            {
-                totalweight += i;
-            }
             tree[1] = -1;
             CreateTree(2, 2, s);
             Console.Write(max);
             Console.Read();
         }
-        static int Judge(int nowworking,int oneafternoworkint,int nowweight)
+        static int Judge(int arrayindex)
         {
-            return 1;
+            double[] value = new double[arrayindex];
+            double[] right = new double[arrayindex];
+            double[] left = new double[arrayindex];
+            for (int i = arrayindex - 1; i > 0; i--) 
+            {
+                if (tree[i] == -1)
+                {
+                    value[i] = value[2 * i] + value[2 * i + 1];
+                    double thisleft = value[2 * i] / value[i];
+                    double thisright = value[2 * i + 1] / value[i];
+                    left[i] = Min(-thisleft + left[2 * i], thisright + left[2 * i + 1]);
+                    right[i] = Max(-thisleft + right[2 * i], thisright + right[2 * i + 1]);
+                }
+                else
+                    value[i] = tree[i];
+            }
+            double now = right[1] - left[1];
+            if (now <= r && now > max)
+                max = now;
+            else if (now >= r) 
+                max = r;
+            return 0;
         }
         static int CreateTree(int arrayindex,int position,int rest)
         {
             if (rest == 0)
             {
-                Judge(2, 3, 0);
+                Judge(arrayindex);
                 return 0;
             }
             if (tree[arrayindex/2] != -1)
@@ -65,6 +81,20 @@ namespace uva1353
             }
 
             return 1;
+        }
+        public static double Max(double a,double b)
+        {
+            double max = a;
+            if (b > a)
+                max = b;
+            return max;
+        }
+        public static double Min(double a, double b)
+        {
+            double min = a;
+            if (b < a)
+                min = b;
+            return min;
         }
     }
 }

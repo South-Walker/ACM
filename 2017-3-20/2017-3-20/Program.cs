@@ -9,6 +9,7 @@ namespace _2017_3_20
 {
     class Program
     {
+        #region
         static int process_num = 3;
         static int[] cost = { 0, 1, 1, 1, 1, 1 };
         static int totalmoney = 1;
@@ -17,8 +18,11 @@ namespace _2017_3_20
         static Queue[] process_arr = new Queue[process_num + 1];
         static int input_now = 1;
         static Hashtable ht = new Hashtable();
+        #endregion
         static void Main(string[] args)
         {
+            #region
+            /*
             for (int i = 1; i < process_num + 1; i++)
             {
                 process_arr[i] = new Queue();
@@ -95,6 +99,44 @@ namespace _2017_3_20
                 }
             }
             Console.Read();
+            */
+            #endregion
+            int[] testarray = { 27, 6, 38, 2, 62, 12, 60, 16, 49 };
+            QSort(testarray, 0, testarray.Length - 1);
+            Console.Read();
+        }
+        static public int Partition(int[] array, int begin, int end)
+        {
+            int i = begin;int j = end;
+            while (j > i)
+            {
+                while (j > i && array[i] <= array[j]) i++;
+                if (j > i)
+                {
+                    int temp = array[j];
+                    array[j] = array[i];
+                    array[i] = temp;
+                    j--;
+                }
+                while (j > i && array[i] <= array[j]) j--;
+                if (j > i)
+                {
+                    int temp = array[j];
+                    array[j] = array[i];
+                    array[i] = temp;
+                    i++;
+                }
+            }
+            return j;
+        }
+        static public void QSort(int[] array, int begin, int end)
+        {
+            if (begin < end)
+            {
+                int j = Partition(array, begin, end);
+                QSort(array, begin, j - 1);
+                QSort(array, j + 1, end);
+            }
         }
         static public void ReadCommand(string input)
         {

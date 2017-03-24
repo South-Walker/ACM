@@ -14,9 +14,30 @@ namespace _2017_3_23
         {
             DateTime dt1 = System.DateTime.Now;
             uva679(20, 524288);
+            uva679inbook(20, 524288);
             DateTime dt2 = System.DateTime.Now;
             Console.WriteLine(dt2.Subtract(dt1).TotalMilliseconds);
             Console.Read();
+        }
+        public static void uva679inbook(int d, int i)
+        {
+            int now = 1;int point = 1;
+            while (now < d)
+            {
+                if (i % 2 == 0)
+                {
+                    i = i / 2;
+                    point = point * 2 + 1;
+                    now++;
+                }
+                else
+                {
+                    i = (i + 1) / 2;
+                    point = point * 2;
+                    now++;
+                }
+            }
+            Console.WriteLine(point);
         }
         public static void uva679(int d, int i)
         {

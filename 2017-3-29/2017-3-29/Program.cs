@@ -11,17 +11,24 @@ namespace _2017_3_29
         static void Main(string[] args)
         {
             AVL a = new AVL();
-            a.Add(25);
-            a.Add(10);
-            a.Add(50);
-            a.Add(40);
-            a.Add(70);
-            a.trueAdd(43);
+            Random rd = new Random();
+            int[] test = new int[512];
+            int aaa;
+            for (int i = 0; i < 1024; i++)
+            {
+                aaa = rd.Next(512);
+                if (test[aaa] == 0)
+                {
+                    a.trueAdd(aaa);
+                    test[aaa] = 1;
+                }
+            }
             Console.Read();
         }
     }
     class Node
     {
+        public int minusleft_right;
         public int value;
         public Node right = null;
         public Node left = null;
@@ -41,57 +48,6 @@ namespace _2017_3_29
         public AVL()
         {
 
-        }
-        public int count_AVL(Node now, int height)//输入root,0,0
-        {
-            if (worrynode == null)
-            {
-                int left_height = 0;
-                int right_height = 0;
-                if (now == null)
-                {
-                    return height;
-                }
-                if (worrynode != null)
-                { }
-                else
-                {
-                    left_height = count_AVL(now.left, height + 1);
-                    if (worrynode != null && (!(is_left || is_right))) 
-                    {
-                        if (now.left == worrynode)
-                        {
-                            preNode = now;
-                            is_left = true;
-                        }
-                        else if (now.right == worrynode)
-                        {
-                            preNode = now;
-                            is_right = true;
-                        }
-                    }
-                    right_height = count_AVL(now.right, height + 1);
-                    if (worrynode != null && (!(is_left || is_right))) 
-                    {
-                        if (now.left == worrynode)
-                        {
-                            preNode = now;
-                            is_left = true;
-                        }
-                        else if (now.right == worrynode)
-                        {
-                            preNode = now;
-                            is_right = true;
-                        }
-                    }
-                    if (Math.Abs(right_height - left_height) == 2)
-                    {
-                        worrynode = now;
-                    }
-                }
-                return Math.Max(left_height, right_height);
-            }
-            return 10000;
         }
         public static int Count(Node thisroot)
         {
@@ -140,6 +96,7 @@ namespace _2017_3_29
                         root = root.left.right;
                         root.right.left = null;
                         root.left.right = null;
+                        int h = 9;
                     }
                     else// if (root.left.right == null)
                     {
@@ -149,6 +106,17 @@ namespace _2017_3_29
                     }
                 }
             }
+        }
+        public int RefreshBF(Node root, int du)//返回度
+        {
+            if (root != null)
+            {
+                int leftheight = RefreshBF(root.left, du + 1);
+                int rightheight = RefreshBF(root.right, du + 1);
+                root.minusleft_right = leftheight - rightheight;
+                return Math.Max(leftheight, rightheight);
+            }
+            return du - 1;
         }
         public void count6()
         {
@@ -207,11 +175,7 @@ namespace _2017_3_29
         }
         public void trueAdd(int value)
         {
-            preNode = null;
-            is_left = false;
-            is_right = false;
             Add(value);
-            count_AVL(root, 0);
             if (worrynode != null)
             {
                 AVL minproblemsubtree = new AVL(worrynode);
@@ -219,59 +183,121 @@ namespace _2017_3_29
                 {
                     minproblemsubtree.count3();
                 }
-                else
+                else if (minproblemsubtree.count == 6) 
                 {
                     minproblemsubtree.count6();
                 }
                 if (is_left)
                 {
-                    worrynode.left = minproblemsubtree.root;
+                    preNode.left = minproblemsubtree.root;
                 }
                 else if (is_right)
                 {
-                    worrynode.right = minproblemsubtree.root;
+                    preNode.right = minproblemsubtree.root;
                 }
                 else
                 {
                     this.root = minproblemsubtree.root;
                 }
             }
+            int du = 0;
+            RefreshBF(root, 0);
         }
         public int Add(int value)
         {
+            worrynode = null;
+            is_left = false;
+            is_right = false;
+            preNode = null;
             Node now = new Node(value);
             if (root == null)
             {
+                now.minusleft_right = 0;
                 root = now;
                 count++;
                 return 1;
             }
             Node nowworking = root;
-            while (true)
+            SubAdd(now, root);
+            count++;
+            return count;
+        }
+        private bool need_changeBF = true;
+        private void SubAdd(Node now, Node nowworking)
+        {
+            need_changeBF = true;
+            if (now.value > nowworking.value)
             {
-                if (value > nowworking.value)
+                if(nowworking.right == null)
                 {
-                    if (nowworking.right == null)
+                    nowworking.right = now;
+                    if (nowworking.left == null)
                     {
-                        nowworking.right = now;
-                        break;
+                        nowworking.minusleft_right = -1;
                     }
                     else
-                        nowworking = nowworking.right;
+                    {
+                        nowworking.minusleft_right = 0;
+                    }
+                    return;
                 }
                 else
                 {
-                    if (nowworking.left == null)
-                    {
-                        nowworking.left = now;
-                        break;
-                    }
-                    else
-                        nowworking = nowworking.left;
+                    SubAdd(now, nowworking.right);
+                }
+                if (need_changeBF)
+                {
+                    nowworking.minusleft_right -= 1;
+                    if (nowworking.minusleft_right == 0)
+                        need_changeBF = false;
                 }
             }
-            count++;
-            return count;
+            else//left+ 
+            {
+                if(nowworking.left == null)
+                {
+                    nowworking.left = now;
+                    if (nowworking.right == null)
+                    {
+                        nowworking.minusleft_right = 1;
+                    }
+                    else
+                    {
+                        nowworking.minusleft_right = 0;
+                    }
+                    return;
+                }
+                else
+                {
+                    SubAdd(now, nowworking.left);
+                }
+                if (need_changeBF)  
+                {
+                    nowworking.minusleft_right += 1;
+                    if (nowworking.minusleft_right == 0)
+                        need_changeBF = false;
+                }
+            }
+            if (worrynode == null)
+            {
+                if (Math.Abs(nowworking.minusleft_right) == 2)
+                {
+                    worrynode = nowworking;
+                }
+            }
+            if (worrynode != null)
+            {
+                if (nowworking.left == worrynode)
+                {
+                    preNode = nowworking;
+                    is_left = true;
+                }
+                if (nowworking.right == worrynode)
+                {
+                    preNode = nowworking;
+                    is_right = true;
+                }
+            }
         }
     }
 }

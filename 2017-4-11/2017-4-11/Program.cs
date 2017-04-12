@@ -10,6 +10,14 @@ namespace _2017_4_11
     {
         static void Main(string[] args)
         {
+            RBT rbt = new RBT();
+            rbt.Add(1);
+            rbt.Add(2);
+            rbt.Add(0);
+            rbt.Add(3);
+            rbt.Add(4);
+
+            Console.Read();
         }
     }
     class Node
@@ -37,7 +45,12 @@ namespace _2017_4_11
                 nowworking = (data > nowworking.data) ? nowworking.right : nowworking.left;
             }
             Node newnode = new Node(data);
-            if (data > parentofnowworking.data)
+            if (parentofnowworking == null)
+            {
+                root = newnode;
+                root.is_red = false;
+            }
+            else if (data > parentofnowworking.data)
             {
                 parentofnowworking.right = newnode;
             }
@@ -46,28 +59,152 @@ namespace _2017_4_11
                 parentofnowworking.left = newnode;
             }
             newnode.parent = parentofnowworking;
-            if (newnode.parent == null)
+            if (parentofnowworking != null && parentofnowworking.is_red)  //需要旋转
             {
-                newnode.is_red = false;
+                newnode = ColorRation(newnode);//这个染色要保证回复到叔节点为黑的情况，此时树仍可能违背红黑性质，newnode是红节点。
+                root.is_red = false;//可能在上一步中把root染成红了
+                if (newnode.parent != null && newnode.parent.is_red)
+                {
+                    Rotation(newnode);//开始干活
+                }
             }
-            else if (newnode.parent.is_red) //需要旋转
+        }
+        private void Rotation(Node z)
+        {
+            try
             {
-                newnode = ColorRation(newnode);//这个染色要保证回复到叔节点为黑的情况，此时树仍可能违背红黑性质。
+                //调用这个方法的前提是父存在，且父为红，因为父为红，所以父非根，所以祖父存在
+                Node parent = z.parent;
+                Node grandparent = parent.parent;
+                //把所有情况化为LL,或者RR
+                if (grandparent.left == parent)
+                {
+                    if (parent.right == z)//lr
+                        z = LR(z);
+                    LL(z);//ll
+                }
+                else
+                {
+                    if (parent.left == z)//rl
+                        z = RL(z);
+                    RR(z);//rr
+                }
             }
+            catch(NullReferenceException)
+            {
+                //如果连grandparent都是null，那么树高最多两层，而且第一层是黑根，那不可能违反红黑性质，换句话说，这个方法根本不可能被调用，写上这个catch是为了让逻辑更清楚一点。
+                return;
+            }
+        }
+        private void RR(Node z)
+        {
+
+        }
+        private void LL(Node z)
+        {
+            Node parent = z.parent;
+            Node grandparent = parent.parent;
+            Node brother = parent.right;
+            grandparent.is_red = true;
+            parent.is_red = false;
+            Node grandgrandprent;//可能不存在，此时祖父是root
+            if (grandparent != root)
+            {
+                grandgrandprent = grandparent.parent;
+                if (grandgrandprent.left == grandparent)
+                {
+                    grandgrandprent.left = parent;
+                }
+                else
+                {
+                    grandgrandprent.right = parent;
+                }
+                parent.parent = grandgrandprent;
+            }
+            else
+            {
+                parent.parent = null;
+                root = parent;
+            }
+            parent.right = grandparent;
+            grandparent.parent = parent;
+            grandparent.left = brother;
+            if (brother != null)
+                brother.parent = grandparent;
+        }
+        private Node LR(Node z)
+        {
+            Node leftson = z.left;
+            Node rightson = z.right;
+            Node parent = z.parent;
+            Node grandparent = parent.parent;//一定存在不赘述
+            Node brother = parent.left;//这里，因为已经确定是LR型，那不需要判断z与p的相对位置了
+            z.parent = grandparent;
+            grandparent.left = z;//同理，确定是LR型
+            parent.parent = z;
+            z.left = parent;
+            if (leftson != null)
+                leftson.parent = parent;
+            parent.right = leftson;
+            return parent;//为与本来就是LL旋转的可能统一输入格式，故将z下调一层，此时本来的z是现在parent的父节点
+        }
+        private Node RL(Node z)
+        {
+            Node leftson = z.left;
+            Node rightson = z.right;
+            Node parent = z.parent;
+            Node grandparent = parent.parent;
+            Node brother = parent.right;
+            z.parent = grandparent;
+            grandparent.right = z;//同理，确定是RL型
+            parent.parent = z;
+            z.right = parent;
+            if (rightson != null)
+                rightson.parent = parent;
+            parent.right = rightson;
+            return parent;//为与本来就是LL旋转的可能统一输入格式，故将z下调一层，此时本来的z是现在parent的父节点
         }
         private static Node ColorRation(Node z)//染色结束之后返回相当于需要旋转的树的新增节点 z必然是红节点
         {
-            Node father = z.parent;
-            Node grandfather = father.parent;
+            Node worker;
+            Node father;
+            Node grandfather;
+            try
+            {
+                father = z.parent;
+                grandfather = father.parent;
+            }
+            catch (NullReferenceException)
+            {
+                return z;
+            }
             Node uncle = (grandfather.left == father) ? grandfather.right : grandfather.left;
-            if (father.is_red && uncle.is_red)
+            if (father.is_red && uncle != null && uncle.is_red) 
             {
                 grandfather.is_red = true;
                 father.is_red = false;
                 uncle.is_red = false;
-                //这里用个lambda表达式表示把uncle与father所有非空节点染黑好像挺带感的，当然要想一下到底需不需要染
+                //需要染，因为只有第一次递归中满足不要染的条件
+                //实在觉得不需要染，写完后测试一下就是，很简单的
+                if ((worker = father.left) != null)
+                {
+                    worker.is_red = true;
+                }
+                if ((worker = father.right) != null)
+                {
+                    worker.is_red = true;
+                }
+                if ((worker = uncle.left) != null)
+                {
+                    worker.is_red = true;
+                }
+                if ((worker = uncle.right) != null)
+                {
+                    worker.is_red = true;
+                }
+                z = ColorRation(grandfather);
             }
-            return grandfather;
+            return z;
         }
     }
 }

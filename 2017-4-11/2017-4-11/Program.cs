@@ -11,12 +11,12 @@ namespace _2017_4_11
         static void Main(string[] args)
         {
             RBT rbt = new RBT();
-            rbt.Add(1);
-            rbt.Add(2);
-            rbt.Add(0);
+            rbt.Add(11);
+            rbt.Add(14);
+            rbt.Add(15);
             rbt.Add(3);
+            rbt.Add(2);
             rbt.Add(4);
-
             Console.Read();
         }
     }
@@ -98,7 +98,35 @@ namespace _2017_4_11
         }
         private void RR(Node z)
         {
-
+            Node parent = z.parent;
+            Node grandparent = parent.parent;
+            Node brother = parent.left;
+            grandparent.is_red = true;
+            parent.is_red = false;
+            Node grandgrandprent;//可能不存在，此时祖父是root
+            if (grandparent != root)
+            {
+                grandgrandprent = grandparent.parent;
+                if (grandgrandprent.left == grandparent)
+                {
+                    grandgrandprent.left = parent;
+                }
+                else
+                {
+                    grandgrandprent.right = parent;
+                }
+                parent.parent = grandgrandprent;
+            }
+            else
+            {
+                parent.parent = null;
+                root = parent;
+            }
+            parent.left = grandparent;
+            grandparent.parent = parent;
+            grandparent.right = brother;
+            if (brother != null)
+                brother.parent = grandparent;
         }
         private void LL(Node z)
         {
@@ -178,7 +206,11 @@ namespace _2017_4_11
             {
                 return z;
             }
-            Node uncle = (grandfather.left == father) ? grandfather.right : grandfather.left;
+            Node uncle;
+            if (grandfather == null)
+                uncle = null;
+            else
+                uncle = (grandfather.left == father) ? grandfather.right : grandfather.left;
             if (father.is_red && uncle != null && uncle.is_red) 
             {
                 grandfather.is_red = true;

@@ -12,11 +12,8 @@ namespace _2017_4_11
         {
             RBT rbt = new RBT();
             rbt.Add(11);
-            rbt.Add(14);
-            rbt.Add(15);
-            rbt.Add(3);
-            rbt.Add(2);
-            rbt.Add(4);
+            rbt.Add(10);
+            rbt.Delect(11);
             Console.Read();
         }
     }
@@ -35,6 +32,115 @@ namespace _2017_4_11
     class RBT
     {
         public Node root = null;
+        public void Delect(int data)
+        {
+            Node nowworking = root;
+            while (nowworking == null || nowworking.data != data) 
+            {
+                nowworking = (nowworking.data > data) ? nowworking.left : nowworking.right;
+            }
+            if (nowworking != null)
+                DelectNode(nowworking);
+        }
+        private void DelectNode(Node nowworking)
+        {
+            Node x;
+            bool is_delectcolorred = false;
+            Node parent;
+            if (nowworking.left != null && nowworking.right != null)
+            {
+                x = nowworking.right;
+                while (x.left != null)
+                {
+                    x = x.left;
+                }
+                int temp = nowworking.data;
+                nowworking.data = x.data;
+                x.data = temp;
+                nowworking = x;
+                x = x.right;
+                parent = nowworking.parent;
+                if (parent.left == nowworking)
+                {
+                    parent.left = x;
+                }
+                else
+                {
+                    parent.right = x;
+                }
+                if (x != null)
+                    x.parent = parent;
+            }
+            else if (nowworking.left == null)//删除点左为空，右可能为空
+            {
+                x = nowworking.right;//唯一可能是null
+                parent = nowworking.parent;
+                if (x != null)
+                {
+                        x.parent = parent;
+                    if (nowworking != root)
+                    {
+                        if (parent.left == nowworking)
+                        {
+                            parent.left = x;
+                        }
+                        else
+                            parent.right = x;
+                    }
+                }
+                else//x为空
+                {
+                    if (nowworking != root)
+                    {
+                        if (parent.left == nowworking)
+                        {
+                            parent.left = x;
+                        }
+                        else
+                            parent.right = x;
+                    }
+                }
+                if (nowworking == root)
+                    root = x;
+            }
+            else//删除点左不为空，右为空
+            {
+                x = nowworking.left;
+                parent = nowworking.parent;
+                if (parent == null)
+                {
+                    root = x;
+                }
+                else
+                {
+                    if (parent.left == nowworking)
+                    {
+                        parent.left = x;
+                    }
+                    else
+                        parent.right = x;
+                }
+                x.parent = parent;
+            }
+            is_delectcolorred = nowworking.is_red;
+            nowworking = null;
+            if (is_delectcolorred)
+            {
+                //不会发生什么
+            }
+            else if (x == null)
+            {
+            }//如果x是null，要修正一下
+            DelectFixUp(x);
+        }
+        private void DelectFixUp(Node x)
+        {
+            while (x != root && x.is_red == false)
+            {
+
+            }
+            x.is_red = false;
+        }
         public void Add(int data)
         {
             Node nowworking = root;

@@ -282,3 +282,24 @@ debug笔记:想在控制台应用程序中调用Drawing命名空间时，需要�
 黑色然后向上回溯，直到梗节点或者x原色为红，先讨论是null的情况，这个时候要把x指向一个新实例，参与后面的旋转。
 <br>今天写完了对一个树（非红黑）的节点删除方法，红黑树的删除比我想象的复杂了一点，尤其是x可能是null这一点太难处理，基本上就到这里结束红黑吧
 因为还要准备期中考试，可能拨不出多少时间了。
+<br>4-20<br>
+期中考试结束，今天试了试asp的route技术，用它实现了传值，说一下怎么实现。<br>
+在global全局配置文件中引用System.Web.Routing命名空间。写一个方法名字推荐用RegisterRoutes（）参数传递唯一的
+RouteCollection类的一个实例。在方法内部调用该实例下的MapPageRoute方法，第一个参数是路由名称，暂时没用，可不写，第二个
+参数是路由的格式，用占位符表示变量名称，如"ExpenseReport/{locale}/{year}/{*extrainfo}"，第三个参数
+表明发送给哪个后台执行，第四个参数如果选择了true表明要对变量值追加检查与默认值，第五个参数要求传递RouteValueDictionary这个结构的一个
+实例
+    new RouteValueDictionary { 
+        { "locale", "US" }, 
+        { "year", DateTime.Now.Year.ToString() } }
+        表明变量的默认值。
+        第四个参数同理
+        
+    new RouteValueDictionary { 
+        { "locale", "[a-z]{2}" }, 
+        { "year", @"\d{4}" } }
+        表明的是对变量值的正则约束
+<br>
+在Application_Start方法中调用它，这样就成功的启用了asp路由功能
+<br>
+要获取值时，在对应的asp后台通过Page.RouteData.Values["变量名"]调用

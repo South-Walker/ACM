@@ -303,3 +303,13 @@ RouteCollection类的一个实例。在方法内部调用该实例下的MapPageR
 在Application_Start方法中调用它，这样就成功的启用了asp路由功能
 <br>
 要获取值时，在对应的asp后台通过Page.RouteData.Values["变量名"]调用
+<br>4-21<br>
+在iis中开启ftp服务时，要保证ftp根目录和ftp本身权限是相同的，不然作用域取交集。
+<br>4-22<br>
+实现了利用ftp协议的进程级别通信（套接字编程）服务端程序在虚拟机，客户端程序在主机上，记录一些重点。
+1.socket类的实例化方法需要三个参数AddressFamily，SocketType，ProtocolType，第一个表明ip地址是ipv4还是ipv6，第二个是套接字使用的方法，一般以流的形式使用，第三个是使用的协议，用的是Tcp协议
+2.收信需要对socket实例监听（listen方法），然后用accept方法接收，accept方法会阻塞线程，直到接收到数据后才开始执行后面的语句
+3.服务端用对socket实例blind方法绑定服务端ip与端口，客户端用connect方法指定服务器端的套接字（如果连接不成功，会在这条语句内抛出错误）
+4.对于服务端使用accept方法接收到连接请求后不会影响当前套接字的监听，相反，accept方法会抛出一个新的socket对象（这个对象的RemoteEndPoint属性能返回客户端的套接字不过一般情况下，是返回网关地址）
+5.对于发送与接收数据，都是在流（networkstream类实例）中处理的，使用的read与write方法，write时利用前4个字节流写入长度（因为tcp的无消息边性），read时先读出前4个字节，然后利用一个while循环在
+tcp缓冲器中不断读取直到读完。（值得注意的一点是unicode编码中一个字符用2个字节编码，所以当计算长度时应该计算字符串长度的两倍）

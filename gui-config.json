@@ -1,0 +1,64 @@
+{
+  "configs": [
+    {
+      "server": "",
+      "server_port": 8388,
+      "password": "",
+      "method": "aes-256-cfb",
+      "remarks": "",
+      "auth": false,
+      "timeout": 5
+    },
+    {
+      "server": "thec.min.moe",
+      "server_port": 3389,
+      "password": "N3v3rSayN3v32!!1",
+      "method": "rc4-md5",
+      "remarks": "",
+      "auth": true,
+      "timeout": 5
+    }
+  ],
+  "strategy": null,
+  "index": 1,
+  "global": false,
+  "enabled": true,
+  "shareOverLan": false,
+  "isDefault": false,
+  "localPort": 1080,
+  "pacUrl": null,
+  "useOnlinePac": false,
+  "availabilityStatistics": false,
+  "autoCheckUpdate": true,
+  "isVerboseLogging": false,
+  "logViewer": {
+    "fontName": "Consolas",
+    "fontSize": 8.0,
+    "bgColor": "black",
+    "textColor": "white",
+    "topMost": false,
+    "wrapText": false,
+    "toolbarShown": false,
+    "width": 600,
+    "height": 400,
+    "top": 632,
+    "left": 1320,
+    "maximized": true
+  },
+  "proxy": {
+    "useProxy": false,
+    "proxyType": 0,
+    "proxyServer": "",
+    "proxyPort": 0,
+    "proxyTimeout": 3
+  },
+  "hotkey": {
+    "SwitchSystemProxy": "",
+    "ChangeToPac": "",
+    "ChangeToGlobal": "",
+    "SwitchAllowLan": "",
+    "ShowLogs": "",
+    "ServerMoveUp": "",
+    "ServerMoveDown": ""
+  }
+}

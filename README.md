@@ -364,4 +364,6 @@ socket编程，笔记，tcp参数是无边界的，因此接收信息有三种�
 实质上是一个委派new AsyncCallback（）的构造函数需要填写一个方法，这个方法唯一使用的是一个IAsyncResult类的实例做参数，在使用方法时，可以通过iar.AsyncState的方式返回BeginAccept中object类的实参，
 故BeginAccept方法的object一般用来传递待接收的套接字，让被委派的方法得以用iar.AsyncState来获得。及其特殊的情况下可以传递一个结构，由此得到更多的状态信息。被委派的方法内部对被传递的原套接字对象使用
 EndAccept（）方法，即可返回监听到的套接字实例，EndAccept内同样需要传递IAsyncResult内实例。客户端类似，不讲了。
-再记一下如何在异步之中用阻塞线程的方法来完成同步
+明天试一下如何在异步之中用阻塞线程的方法来完成同步，然后做个项目。
+<br>5-3<br>
+先做题，Red and Black，简单的不想说话。。把昨天的源码改一下就是了。。再做一道吧。。pet。。。其实用Dijkstra立马就出来了。。。

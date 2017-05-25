@@ -416,3 +416,10 @@ echostr，表示认证成功。
 使用：string a = null??"null"
 当且仅当??前是null时（“”与string.empty都不行），令a等于??后的值。
 私有的属性名用小写，前方加上_
+然后总结一下登陆smtp服务器并发送邮件的方法：
+首先，实例化MailMessage类，填充Subject（标题），Body（正文），To（这个是从BaseCollection继承来的，填充收件人的地址），
+From（发件人填充一个MailAddress类实例，其中，实例化方法的第二个参数可写入昵称），
+Attachments（同样继承自BaseCollection类，Add只能添加Attachment类实例，Attachment类用字符串类的文件地址与MediaTypeNames.Application.Octet来实例化
+后者表示对文件不做解释），填充IsBodyHtml属性为true。
+随后，实例化smtpclient类，设定UseDefaultCredentials属性为false，DenliveryMethod属性为SmtpDeliveryMethod.Network，EnableSsl为false，
+填充Host和Port，Credentials属性需要实例化NetWorkCredential类（即账号，密码）来填充

@@ -24,23 +24,41 @@ namespace _2017_6_6
             {
                 aim[i] = 0 - nums[i];
             }
-            int b = 0;int e = len - 1;
+            int b = 0;int e = len - 1;int fin = -99999999;
             for (int i = 0; i < len - 2; i++) 
             {
+                List<int> mylast = new List<int>();
                 int aimnum = aim[i];
+                if (fin == aimnum)
+                    continue;
+                else
+                    fin = aimnum;
                 b = i + 1;e = len - 1;
                 while (b != e)
                 {
                     int sum = num[b] + num[e];
                     if (sum == aimnum)
                     {
-                        temp.Add(0 - aimnum);
-                        temp.Add(num[b]);
-                        temp.Add(num[e]);
-                        if (check(result, temp))
+                        bool isrepeat = false;
+                        foreach (var item in mylast)
+                        {
+                            if (item == num[b])
+                            {
+                                isrepeat = true;
+                            }
+                        }
+                        if (!isrepeat)
+                        {
+                            temp.Add(0 - aimnum);
+                            temp.Add(num[b]);
+                            mylast.Add(num[b]);
+                            temp.Add(num[e]);
                             result.Add(temp);
-                        temp = new List<int>();
-                        e--;
+                            temp = new List<int>();
+                        }
+                        b++;
+                        if (b != e)
+                            e--;
                     }
                     else if (sum < aimnum)
                     {
@@ -51,21 +69,6 @@ namespace _2017_6_6
                 }
             }
             return result;
-        }
-        public static bool check(IList<IList<int>> result, IList<int> temp)
-        {
-            int a = temp[0];int b = temp[1];int c = temp[2];
-            foreach (List<int> now in result)
-            {
-                if (now[0] != a)
-                    continue;
-                if (now[1] != b)
-                    continue;
-                if (now[2] != c)
-                    continue;
-                return false;
-            }
-            return true;
         }
         public static List<int> Sort (int[] nums)
         {

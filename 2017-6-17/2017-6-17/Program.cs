@@ -10,13 +10,9 @@ namespace _2017_6_17
     {
         static void Main(string[] args)
         {
-            ListNode head = new ListNode(1);
-            head.next = new ListNode(2);
-       /*     head.next.next = new ListNode(3);
-            head.next.next.next = new ListNode(4);
-            head.next.next.next.next = new ListNode(5);*/
             Solution a = new Solution();
-            a.RemoveNthFromEnd(head, 1);
+            int[] test = { 1,1,3,3,5,6,6 };
+            a.RemoveDuplicates(test);
         }
     }
   public class ListNode {
@@ -26,6 +22,55 @@ namespace _2017_6_17
   }
     public class Solution
     {
+        public int RemoveDuplicates(int[] nums)
+        {
+            if (nums.Length <= 1)
+            {
+                return nums.Length;
+            }
+            int nowindex = 1; int shouldindex = 1; int beforevalue = nums[0];
+            while (shouldindex < nums.Length)
+            {
+                if (nums[shouldindex] == beforevalue)
+                {
+                    shouldindex++;
+                    continue;
+                }
+                beforevalue = nums[shouldindex];
+                nums[nowindex] = nums[shouldindex];
+                nowindex++;
+                shouldindex++;
+            }
+            return nowindex;
+        }
+        public int SearchInsert(int[] nums, int target)
+        {
+            if (nums.Length == 0)
+            {
+                return 0;
+            }
+            int nowindex = nums.Length / 2;
+            int end = nums.Length - 1;
+            int begin = 0;
+            while (end > begin) 
+            {
+                if (nums[nowindex] == target)
+                    return nowindex;
+                if (nums[nowindex] > target)
+                {
+                    end = nowindex - 1;
+                }
+                else
+                {
+                    begin = nowindex + 1;
+                }
+                nowindex = (end - begin) / 2 + begin;
+            }
+            if (target > nums[end])
+                return end + 1;
+            else
+                return end;
+        }
         public ListNode RemoveNthFromEnd(ListNode head, int n)
         {
             if (head.next == null && n >= 1) 

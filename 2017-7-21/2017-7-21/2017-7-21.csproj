@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{08021972-A928-4C92-9EBE-90F7FC213958}</ProjectGuid>
+    <ProjectGuid>{3E89BC6C-1B60-400B-9AB0-7C2198E49C3B}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>temp</RootNamespace>
-    <AssemblyName>temp</AssemblyName>
+    <RootNamespace>_2017_7_21</RootNamespace>
+    <AssemblyName>2017-7-21</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

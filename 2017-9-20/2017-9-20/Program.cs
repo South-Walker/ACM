@@ -22,15 +22,33 @@ namespace _2017_9_20
         {
             List<IList<int>> result = new List<IList<int>>();
             qSort(candidates, 0, candidates.Length - 1);
-
-
+            reCall(result, candidates, target, new List<int>(), candidates.Length - 1, new bool[candidates.Length]);
             return result;
         }
-        public void reCall(IList<IList<int>> result, int[] candidates, int target, IList<int> now, int indexnow)
+        public void reCall(IList<IList<int>> result, int[] candidates, int target, IList<int> now, int indexnow, bool[] check)
         {
-
+            if (target == 0)
+            {
+                result.Add(deepCopy(now));
+                return;
+            }
+            if (target < 0)
+            {
+                return;
+            }
+            for (int i = indexnow; i >= 0; i--) 
+            {
+                if (i == candidates.Length - 1 || candidates[i + 1] != candidates[i] || check[i + 1]) 
+                {
+                    now.Add(candidates[i]);
+                    check[i] = true;
+                    reCall(result, candidates, target - candidates[i], now, i - 1, check);
+                    check[i] = false;
+                    now.RemoveAt(now.Count - 1);
+                }
+            }
         }
-        public List<int> deepCopy(List<int> now)
+        public List<int> deepCopy(IList<int> now)
         {
             List<int> result = new List<int>();
             for (int i = 0; i < now.Count; i++)

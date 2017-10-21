@@ -48,7 +48,7 @@ namespace _2017_10_20
                     }
                 }
             }
-            for (int i = 0; i < matrix.GetLength(0); i++)
+            for (int i = 1; i < matrix.GetLength(0); i++)
             {
                 if (matrix[i, 0] == 0)
                 {
@@ -58,7 +58,7 @@ namespace _2017_10_20
                     }
                 }
             }
-            for (int j = 0; j < matrix.GetLength(1); j++)
+            for (int j = 1; j < matrix.GetLength(1); j++)
             {
                 if (matrix[0, j] == 0)
                 {

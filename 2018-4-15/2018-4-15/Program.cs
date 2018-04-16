@@ -14,29 +14,49 @@ namespace _2018_4_15
     }
     public class Solution
     {
-        public int MaximalRectangle(char[,] matrix)
+        public int LargestRectangleArea(int[] heights)
         {
-            int length1 = matrix.GetLength(0);
-            int length2 = matrix.GetLength(1);
-            if (length1 + length2 == 0 || length1 + length2 == 1) 
-                return 0;
             int max = 0;
-            int[,] dp = new int[length1, length2];
-            for (int i = 0; i < length1; i++)
+            myStack ms = new myStack();
+            for (int i = 0; i < heights.Length; i++)
             {
-                for (int j = 0; j < length2; j++)
+                int start = heights[i];
+                max = Math.Max(ms.Push(start, i), max);
+            }
+            max = Math.Max(ms.Push(int.MinValue, heights.Length), max);
+            return max;
+        }
+        class myStack
+        {
+            Stack<int> s = new Stack<int>();
+            Stack<int> indexs = new Stack<int>();
+            public int Push(int value, int index)
+            {
+                if (s.Count == 0 || s.Peek() <= value) 
                 {
-                    if (matrix[i, j] == '1')
+                    s.Push(value);
+                    indexs.Push(index);
+                    return 0;
+                }
+                else
+                {
+                    int max = 0;
+                    Queue<int> temp = new Queue<int>();
+                    while (s.Count != 0 && s.Peek() > value) 
                     {
-                        findmatrix(matrix, dp, i, j);
-                        max = Math.Max(dp[i, j], max);
+                        temp.Enqueue(s.Pop());
                     }
+                    int last = 0;
+                    while (temp.Count != 0) 
+                    {
+                        last = indexs.Pop();
+                        max = Math.Max(temp.Dequeue() * (index - last), max);
+                    }
+                    s.Push(value);
+                    indexs.Push(last);
+                    return max;
                 }
             }
-        }
-        private void findmatrix(char[,] matrix, int[,] dpr, int[,] dpc, int i, int j)
-        {
-
         }
     }
 }

@@ -27,7 +27,7 @@ namespace _2018_4_18
             t[3].Add(3);
 
             Solution a = new Solution();
-            a.MinimumTotal(t);
+            a.NumDecodings("100");
         }
     }
     public class Solution
@@ -62,33 +62,18 @@ namespace _2018_4_18
         }
         public int NumDecodings(string s)
         {
-            if (string.IsNullOrEmpty(s))
-                return 0;
-            int length = s.Length;
-            int[] dp = new int[length];
-            for (int i = 1; i < length; i++)
+            int n1 = 1, n2 = 1, n3 = 0;
+            if (s.Length == 0 || s[0] == '0') return 0;
+            for (int i = 2; i <= s.Length; i++)
             {
-                switch (s[i])
-                {
-                    case '0':
-                        break;
-                    case '1':
-                    case '2':
-                        break;
-                    case '3':
-                    case '4':
-                    case '5':
-                    case '6':
-                        break;
-                    case '7':
-                    case '8':
-                    case '9':
-                        break;
-                    default:
-                        break;
-                }
+                n3 = 0;
+                if (s[i - 1] != '0') n3 = n2;
+                int num = Convert.ToInt32(s.Substring(i - 2, 2));
+                if (num >= 10 && num <= 26) n3 += n1;
+                n1 = n2;
+                n2 = n3;
             }
-            return dp[length - 1];
+            return n2;
         }
     }
 }

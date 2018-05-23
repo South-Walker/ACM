@@ -18,6 +18,16 @@ int getlen(sqlist *L)
 {
 	return (L->length);
 }
+void add(sqlist *L,ElemType x)
+{
+	if(L->length==L->listsize)
+	{
+		L->data=(ElemType*)realloc(L->data,(L->listsize+1)*sizeof(ElemType));
+		L->listsize++;
+	}
+	L->data[L->length]=x;
+	L->length++;
+}
 int getelem(sqlist *L,int i,ElemType *e)
 {
 	if(i<1||i>L->length)
@@ -73,7 +83,7 @@ int delete(sqlist*L,int i,ElemType *e)
 	L->length--;
 	return 1;
 }
-void list(sqlist*L)
+void plist(sqlist*L)
 {
 	int i,length=L->length;
 	ElemType *data=L->data;
@@ -85,4 +95,21 @@ void list(sqlist*L)
 }
 main()
 {
+	sqlist *list=(sqlist*)malloc(sizeof(sqlist));
+	initlist(list);
+	int i;
+	ElemType*pi=(ElemType*)malloc(sizeof(int));
+	for(i=0;i<200;i++)
+	{
+		add(list,i);
+	}
+	for(i=0;i<50;i++)
+	{
+		delete(list,2,pi);
+	}
+	for(i=1;i<=50;i++)
+	{
+		insert(list,1+i,i);
+	}
+	plist(list);
 }

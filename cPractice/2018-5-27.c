@@ -126,10 +126,50 @@ int trap(int* height, int heightSize)
 	free(now);
     return totalrain;
 }
+
+
 main()
 {
-	int height[]={0,1,0,2,1,0,1,3,2,1,2,1};
-	int len=sizeof(height)/sizeof(int);
-	int answer=trap(height,len);
-	printf("%d",answer);
+	char tasks[]="ASHKJHFEQASADAAA";
+	int len=sizeof(tasks)/sizeof(char);
+	leastInterval(tasks,len,1); 
+}
+int leastInterval(char* tasks, int tasksSize, int n) 
+{
+    int task[26];
+    int i;
+    for(i=0;i<26;i++)
+    {
+    	task[i]=0;
+	}
+	for(i=0;i<tasksSize;i++)
+	{
+		int index=(tasks[i]-'A');
+		task[index]++;
+	}
+	sort(task,26);
+	int temp=25;
+	while(temp>=0 && task[25]==task[temp])
+	{
+    	temp--;
+    }
+	int result=(task[25]-1)*(n+1)+25-temp;
+	result=(result>=tasksSize)?result:tasksSize;
+    return result;
+}
+void sort(int* task,int size)
+{
+	int i,j,temp;
+	for(i=0;i<size;i++)
+	{
+		for(j=i+1;j<size;j++)
+		{
+			if(task[j]<task[i])
+			{
+				temp=task[i];
+				task[i]=task[j];
+				task[j]=temp;
+			}
+		}
+	}
 }

@@ -61,6 +61,36 @@ bool aisPalindrome(int x)
 	}
 	return true;
 }
+int removeDuplicates(int* nums, int numsSize) 
+{
+    int first=-1;
+	int second;
+	for(second=0;second<numsSize;second++)
+	{
+		if(first!=-1&&nums[first]==nums[second])
+		{
+			continue;
+		}
+		first++;
+		nums[first]=nums[second];
+	}
+	return first+1;
+}
+int removeElement(int* nums, int numsSize, int val) 
+{
+    int first=-1;
+	int second;
+	for(second=0;second<numsSize;second++)
+	{
+		if(nums[second]==val)
+		{
+			continue;
+		}
+		first++;
+		nums[first]=nums[second];
+	}
+	return first+1;    
+}
 main()
 {
 	struct ListNode* head=(struct ListNode*)malloc(sizeof(struct ListNode));

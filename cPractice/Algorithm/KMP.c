@@ -13,10 +13,13 @@ void getnext(char* c,int csize,int* next)
 		}
 		else
 		{
+			//这一步实际上是把当前的最大公共前缀和c[j]拼接在一起然后递归找最大公共长度
+			//想明白c[j]前k个长度的字符与c前k个长度的字符是一样的 
 			k=next[k];
 		}
 	}
 }
+//这个是自己写的m方级别的预处理方法 
 void mygetnext(char*t,int csize,int*result)
 {
 	result[0]=-1;

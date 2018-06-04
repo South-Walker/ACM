@@ -26,14 +26,14 @@ int calPoints(char** ops, int opsSize)
     int index;
     for(i=0;i<opsSize;i++)
     {
-    	if(ops[i]=="C")
+    	if(ops[i][0]=='C')
     	{
     		if(s->count)
     		{
     			s->count--;
 			}
 		}
-		else if(ops[i]=="D") 
+		else if(ops[i][0]=='D') 
 		{
 			if(s->count)
 			{
@@ -41,7 +41,7 @@ int calPoints(char** ops, int opsSize)
 				s->count++;
 			}
 		}
-		else if(ops[i]=="+")
+		else if(ops[i][0]=='+')
 		{
 			if(s->count>=2)
 			{
@@ -65,7 +65,7 @@ int calPoints(char** ops, int opsSize)
 				temp+=ops[i][index]-'0';
 				index++;
 			}
-			s->datas[s->count]=temp;
+			s->datas[s->count]=(isminues)?-1*temp:temp;
 			s->count++;
 		}
 	}

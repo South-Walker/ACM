@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <malloc.h> 
+#include <limits.h>
 typedef struct node
 {
 	long long data;
@@ -129,15 +130,34 @@ int maxIncreaseKeepingSkyline(int** grid, int gridRowSize, int *gridColSizes)
 {
 	int count=0;
 	int i,j;
+	int *rowmax=(int*)calloc(gridRowSize,sizeof(int));
+	int *colmax=(int*)calloc(51,sizeof(int));
+	int target;
 	for(i=0;i<gridRowSize;i++)
 	{
-		
+		for(j=0;j<gridColSizes[i];j++)
+		{
+			if(grid[i][j]>rowmax[i])
+			{
+				rowmax[i]=grid[i][j];
+			}
+			if(grid[i][j]>colmax[j])
+			{
+				colmax[j]=grid[i][j];
+			}
+		}
 	}
-	return count;   
+	for(i=0;i<gridRowSize;i++)
+	{
+		for(j=0;j<gridColSizes[i];j++)
+		{
+			target=(rowmax[i]>colmax[j])?colmax[j]:rowmax[i];
+			count+=target-grid[i][j];
+		}
+	}
+	return count;
 }
 void main()
 {
-	int i,j;
-	printf("\n%d\n",uniqueMorseRepresentations(ss,len));
 
 }

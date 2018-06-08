@@ -6,7 +6,7 @@ typedef int bool;
 #define false 0
 main()
 {
-	preimageSizeFZF(10);
+	preimageSizeFZF(0);
 	 
 }
 bool validTicTacToe(char** board, int boardSize) 
@@ -101,17 +101,22 @@ bool validTicTacToe(char** board, int boardSize)
 }
 int preimageSizeFZF(int K) 
 {
-	int max=INT_MAX; 
+	int max=INT_MAX;int target;
     long long* array=(long long*)calloc(20,sizeof(long long));
     int i=0,j;
     do
     {
     	i++;
-    	array[i]=4*array[i-1]+1;
+    	array[i]=5*array[i-1]+1;
 	}
     while(array[i]<=max);
-    for(j=0;j<=i;j++)
+    i=0;
+    while(array[i+1]<K)i++;
+    for(;i>0;i--)
     {
-    	printf("%lld\n",array[j]);
+    	if(K==5*array[i])
+    		return 0;
+    	K=K%array[i];
 	}
+	return 5;
 }

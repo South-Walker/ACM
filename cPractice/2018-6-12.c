@@ -7,6 +7,7 @@ typedef struct
 	int Period;
 	int endtime;
 }task;
+task* headfloat(task **tasks,int count);
 main()
 {
 	int Qcount=1;
@@ -30,25 +31,83 @@ main()
 		Qcount++;
 	}
 	Qcount--;
+	
+	for(i=1;i<=Qcount;i++)
+	{
+	//	printf("%d ",tasks[i]->Q_num);
+	}
+	//printf("\n");
+	
 	scanf("%d",&k);
 	if(k==0)
 		return;
 	for(i=0;i<k;i++)
 	{
-		temp=pop(tasks,Qcount);
-		printf("%d\n",temp->Q_num);
-		temp->endtime+=temp->Period;
-		push(tasks,Qcount,temp);
+		printf("%d",headfloat(tasks,Qcount)->Q_num);
+		if(i!=k-1)
+		{
+			printf("\n");
+		}
 	}
 } 
-task* pop(task **tasks,int count)
+task* headfloat(task **tasks,int count)
 {
-	task*result=tasks[1];
-	int index=1;
+	task* result=tasks[1];
+	int index=1; 
+	task* temp;
+	tasks[1]->endtime+=tasks[1]->Period;
+	//将原最小值下沉
 	while(1)
 	{
-		//最小堆上浮 
-		if(isAsmaller)
+		if(index*2+1<=count&&index*2<=count)
+		{
+			if(isAsmaller(tasks[index*2],tasks[index]))
+			{
+				if(isAsmaller(tasks[index*2],tasks[index*2+1]))
+				{
+					temp=tasks[index];
+					tasks[index]=tasks[index*2];
+					tasks[index*2]=temp;
+					index*=2;
+				}
+				else
+				{
+					temp=tasks[index];
+					tasks[index]=tasks[index*2+1];
+					tasks[index*2+1]=temp;
+					index=index*2+1;
+				}
+			}
+			else if(isAsmaller(tasks[index*2+1],tasks[index]))
+			{
+				temp=tasks[index];
+				tasks[index]=tasks[index*2+1];
+				tasks[index*2+1]=temp;
+				index=index*2+1;
+			}
+			else
+			{
+				break;
+			}
+		}
+		else if(index*2<=count)
+		{
+			if(isAsmaller(tasks[index],tasks[index*2]))
+			{
+				break;
+			}
+			else
+			{
+				temp=tasks[index];
+				tasks[index]=tasks[index*2];
+				tasks[index*2]=temp;
+			}
+			index*=2;
+		}
+		else
+		{
+			break;
+		}
 	}
 	return result;
 }
@@ -69,7 +128,6 @@ void push(task **tasks,int count,task *newtask)
 		index/=2;
 	}
 }
-void
 int isAsmaller(task *a,task *b)
 {
 	if(a->endtime<b->endtime)

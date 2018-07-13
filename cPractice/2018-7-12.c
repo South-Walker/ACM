@@ -8,11 +8,153 @@ void main()
 int checkecnu13(int***eudokuboard,int**eudokucount,int i,int j,int n)
 {
 	int check[10];
-	
+	int k;
+	int a,b;
+	if(eudokucount[i][j]==2)
+	{
+		if(eudokuboard[i][j][0]>eudokuboard[i][j][1]&&eudokuboard[i][j][1]!=0)
+			return 0;
+	} 
+	for(k=0;k<10;k++)
+	{
+		check[k]=0;
+	}
+	for(k=0;k<6;k++)
+	{
+		if(eudokucount[i][k]==1)
+		{
+			check[eudokuboard[i][k][0]]++;
+		}
+		else
+		{
+			check[eudokuboard[i][k][0]]++;
+			check[eudokuboard[i][k][1]]++;
+		}
+	}
+	for(k=1;k<10;k++)
+	{
+		if(check[k]>1)
+			return 0;
+	}
+	for(k=0;k<10;k++)
+	{
+		check[k]=0;
+	}
+	for(k=0;k<6;k++)
+	{
+		if(eudokucount[k][j]==1)
+		{
+			check[eudokuboard[k][j][0]]++;
+		}
+		else
+		{
+			check[eudokuboard[k][j][0]]++;
+			check[eudokuboard[k][j][1]]++;
+		}
+	}
+	for(k=1;k<10;k++)
+	{
+		if(check[k]>1)
+			return 0;
+	}
+	for(k=0;k<10;k++)
+	{
+		check[k]=0;
+	}
+	a=i/2;
+	b=j/3;
+	a=a*2;
+	b=b*3;
+	//a,b;a,b+1;a,b+2;
+	//a+1,b;a+1,b+1;a+1,b+2; 
+	if(eudokucount[a][b]==1)
+	{
+		check[eudokuboard[a][b][0]]++;
+	}
+	else
+	{
+		check[eudokuboard[a][b][0]]++;
+		check[eudokuboard[a][b][1]]++;
+	}
+	if(eudokucount[a][b+1]==1)
+	{
+		check[eudokuboard[a][b+1][0]]++;
+	}
+	else
+	{
+		check[eudokuboard[a][b+1][0]]++;
+		check[eudokuboard[a][b+1][1]]++;
+	}
+	if(eudokucount[a][b+2]==1)
+	{
+		check[eudokuboard[a][b+2][0]]++;
+	}
+	else
+	{
+		check[eudokuboard[a][b+2][0]]++;
+		check[eudokuboard[a][b+2][1]]++;
+	}
+	if(eudokucount[a+1][b]==1)
+	{
+		check[eudokuboard[a+1][b][0]]++;
+	}
+	else
+	{
+		check[eudokuboard[a+1][b][0]]++;
+		check[eudokuboard[a+1][b][1]]++;
+	}
+	if(eudokucount[a+1][b+1]==1)
+	{
+		check[eudokuboard[a+1][b+1][0]]++;
+	}
+	else
+	{
+		check[eudokuboard[a+1][b+1][0]]++;
+		check[eudokuboard[a+1][b+1][1]]++;
+	}
+	if(eudokucount[a+1][b+2]==1)
+	{
+		check[eudokuboard[a+1][b+2][0]]++;
+	}
+	else
+	{
+		check[eudokuboard[a+1][b+2][0]]++;
+		check[eudokuboard[a+1][b+2][1]]++;
+	}
+	for(k=1;k<10;k++)
+	{
+		if(check[k]>1)
+		{
+			return 0;
+		}
+	}
+	return 1;
 }
-void subecnu13(int***eudokuboard,int**eudokucount,int i,int j,int n)
+void subecnu13(int***eudokuboard,int**eudokucount,int i,int j,int n,int*flag)
 {
 	int k;
+	if(*flag==0)
+		return;
+	if(eudokuboard[i][j][n]!=0)
+	{
+		if(eudokucount[i][j]-n==1)
+		{
+			if(j==5&&i==5)
+			{
+				*flag=0;
+			}
+			if(j==5)
+				subecnu13(eudokuboard,eudokucount,i+1,0,0,flag);
+			else
+				subecnu13(eudokuboard,eudokucount,i,j+1,0,flag);
+		}
+		else
+		{
+			subecnu13(eudokuboard,eudokucount,i,j,n+1,flag);	
+		}
+	}
+	else
+	{
 	for(k=1;k<=9;k++)
 	{
 		eudokuboard[i][j][n]=k;
@@ -21,25 +163,50 @@ void subecnu13(int***eudokuboard,int**eudokucount,int i,int j,int n)
 			if(eudokucount[i][j]-n==1)
 			{
 				if(j==5&&i==5)
-					return;
+				{
+					*flag=0;
+				}
 				if(j==5)
-					subecnu13(eudokuboard,eudokucount,i+1,0,0);
+					subecnu13(eudokuboard,eudokucount,i+1,0,0,flag);
 				else
+					subecnu13(eudokuboard,eudokucount,i,j+1,0,flag);
 			}
 			else
 			{
-				subecnu13(eudokuboard,eudokucount,i,j,n+1);	
+				subecnu13(eudokuboard,eudokucount,i,j,n+1,flag);	
 			}
 		}
+		if(*flag==0)
+		{
+			return;
+		}
 		eudokuboard[i][j][n]=0;
+	}
 	}
 }
 void ecnu13()
 {
-	int*eudokuboard[6][6];
-	int eudokucount[6][6];
+	int***eudokuboard;
+	int**eudokucount;
+	int*flag;
 	int i,j;
 	char s[10];
+	flag=(int*)malloc(sizeof(int));
+	*flag=1; 
+	eudokuboard=(int***)malloc(6*sizeof(int**));
+	for(i=0;i<6;i++)
+	{
+		eudokuboard[i]=(int**)malloc(6*sizeof(int*));
+	}
+	eudokucount=(int**)malloc(6*sizeof(int*));
+	for(i=0;i<6;i++)
+	{
+		eudokucount[i]=(int*)malloc(6*sizeof(int));
+		for(j=0;j<6;j++)
+		{
+			eudokucount[i][j]=0;
+		}
+	}
 	for(i=0;i<6;i++)
 	{
 		for(j=0;j<6;j++)
@@ -81,7 +248,7 @@ void ecnu13()
 			}
 		}
 	}
-	subecnue13(eudokuboard,eudokucount,0,0,0);
+	subecnu13(eudokuboard,eudokucount,0,0,0,flag);
 	for(i=0;i<6;i++)
 	{
 		for(j=0;j<6;j++)
@@ -95,7 +262,8 @@ void ecnu13()
 				printf("%d/%d ",eudokuboard[i][j][0],eudokuboard[i][j][1]);
 			}
 		}
-		printf("\n");
+		if(i!=5)
+			printf("\n");
 	}
 }
 typedef struct IpValue

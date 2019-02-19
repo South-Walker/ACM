@@ -2,7 +2,7 @@
 #include <limits.h>
 #include <string.h>
 #include <stdlib.h>
-#define MAX 1000001
+#define MAX 999999999
  
 int count;
 void kmpMatch(char * s,int sLength,char * p,int pLength,int *prefix)
@@ -202,7 +202,103 @@ int q3()
 		}
 	}
 }
+
+int cost[6][6];
+int dp[6][6][4];
+int bx,by,ex,ey;
+void solution(int x,int y,int state,int tcost)
+{
+	int i;
+	int nowstate,nowcost;
+	int flag=1;
+	if(x<5)
+	{		
+		nowcost=state*cost[x+1][y];
+		nowstate=nowcost%4+1;
+		flag=1;
+		for(i=0;i<nowstate;i++)
+		{
+			if(dp[x+1][y][i]<tcost+nowcost)
+				flag=0;
+		}
+		if(flag)
+		{		
+			dp[x+1][y][nowstate-1]=tcost+nowcost;
+			solution(x+1,y,nowstate,dp[x+1][y][nowstate-1]);
+		}
+	}
+	if(x>0)
+	{
+		nowcost=state*cost[x-1][y];
+		nowstate=nowcost%4+1;
+		flag=1;
+		for(i=0;i<nowstate;i++)
+		{
+			if(dp[x-1][y][i]<tcost+nowcost)
+				flag=0;
+		}
+		if(flag)
+		{
+			dp[x-1][y][nowstate-1]=tcost+nowcost;
+			solution(x-1,y,nowstate,dp[x-1][y][nowstate-1]);
+		}
+	}	
+	if(y<5)
+	{		
+		nowcost=state*cost[x][y+1];
+		nowstate=nowcost%4+1;
+		flag=1;
+		for(i=0;i<nowstate;i++)
+		{
+			if(dp[x][y+1][i]<tcost+nowcost)
+				flag=0;
+		}
+		if(flag)
+		{
+			dp[x][y+1][nowstate-1]=tcost+nowcost;
+			solution(x,y+1,nowstate,dp[x][y+1][nowstate-1]);
+		}
+	}
+	if(y>0)
+	{
+		nowcost=state*cost[x][y-1];
+		nowstate=nowcost%4+1;
+		flag=1;
+		for(i=0;i<nowstate;i++)
+		{
+			if(dp[x][y-1][i]<tcost+nowcost)
+				flag=0;
+		}
+		if(flag)
+		{
+			dp[x][y-1][nowstate-1]=tcost+nowcost;
+			solution(x,y-1,nowstate,dp[x][y-1][nowstate-1]);
+		}
+	}
+}
 int main()
 {
-	
+	int i,j,k;
+	int now;
+	int min=MAX;
+	for(i=0;i<6;i++)
+	{
+		for(j=0;j<6;j++)
+		{
+			scanf("%d",&now);
+			cost[i][j]=now; 
+			for(k=0;k<4;k++)
+			{
+				dp[i][j][k]=MAX;
+			} 
+		}
+	}
+	scanf("%d%d%d%d",&bx,&by,&ex,&ey);
+	dp[bx][by][0]=0;
+	solution(bx,by,1,0);
+	for(i=0;i<4;i++)
+	{
+		min=(dp[ex][ey][i]<min)?dp[ex][ey][i]:min;
+	}
+	printf("%d",min);
 }

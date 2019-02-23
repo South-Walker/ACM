@@ -260,3 +260,153 @@ int q4()
 	}
 	return 0;
 }
+
+int getlen(char*s)
+{
+	int i=0;
+	while(*s)
+	{
+		i++;
+		s++;
+	}
+	return i;
+}
+char snow[310];
+char s[310];
+int dp[310][310];
+int dpstate[310][310];
+int max;
+void getmaxsub(int abegin,int bbegin,int len)
+{
+	int aend=bbegin-1;
+	int bend=len-1;
+	int i,j,k;
+	int max,state;
+	for(i=0;i+abegin<=aend;i++)
+	{
+		for(j=0;j+bbegin<=bend;j++)
+		{
+			dp[i][j]=0;
+			dpstate[i][j]=0;
+		}
+	}
+	for(i=0;i+abegin<=aend;i++)
+	{
+		for(j=0;j+bbegin<=bend;j++)
+		{
+			max=-1;
+			if(i==0||j==0)
+			{
+				if(i==0)
+				{
+					if(j==0)
+					{
+						if(s[abegin+i]==s[bbegin+j])
+						{
+							dp[i][j]=1;
+						}
+						else
+						{
+							dp[i][j]=0;
+						}
+					}
+					else
+					{
+						if(s[abegin+i]==s[bbegin+j])
+						{
+							dp[i][j]=1;
+						}
+						else
+						{
+							dp[i][j]=dp[i][j-1];
+							dpstate[i][j]=3;
+						}
+					}
+				}
+				else if(j==0)
+				{
+					//i!=0;
+					if(s[abegin+i]==s[bbegin+j])
+					{
+						dp[i][j]=1;
+					}
+					else
+					{
+						dp[i][j]=dp[i-1][j];
+						dpstate[i][j]=2;
+					}
+				}
+				
+			}
+			if(s[abegin+i]==s[bbegin+j])
+			{
+				max=dp[i-1][j-1]+1;
+				dpstate[i][j]=1;
+			}
+			if(max<dp[i-1][j])
+			{
+				max=dp[i-1][j];
+				dpstate[i][j]=2;
+			}
+			if(max<dp[i][j-1])
+			{
+				max=dp[i][j-1];
+				dpstate[i][j]=3;
+			}
+			dp[i][j]=max;
+		}
+	}
+	
+}
+int q5()
+{
+	int i,j,len,now,p,k;
+	int psnow;
+	while(1)
+	{
+		scanf("%s",s);
+		max=0;
+		if(s[0]=='#'&&s[1]=='E'&&s[2]=='N'&&s[3]=='D'&&s[4]=='\0')
+		{
+			break;
+		}
+		len=getlen(s);
+		for(j=1;j<len;j++)
+		{
+			getmaxsub(0,j,len);
+			if(max<dp[j-1][len-1-j])
+			{
+				max=dp[j-1][len-1-j];
+				psnow=max;
+				snow[psnow]='\0';
+				p=j-1;k=len-1-j;
+				while(psnow)
+				{
+					psnow--;
+					while(1)
+					{
+						if(dpstate[p][k]==1)
+						{
+							break;
+						}
+						else if(dpstate[p][k]==2)
+						{
+							p--;
+						}
+						else if(dpstate[p][k]==3)
+						{
+							k--;
+						}
+					}
+					snow[psnow]=s[p];
+					p--;k--;
+				}
+				
+			}
+		}
+		
+		printf("%s",snow);
+		printf("\n");
+	}
+	return 0;
+}

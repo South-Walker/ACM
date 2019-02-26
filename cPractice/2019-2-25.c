@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <limits.h>
 void invs(char* a,int len)
 {
 	int i;
@@ -97,7 +98,7 @@ void getra(char*a,char*b)
 	}
 	if(temp!=0)
 	{
-		ra[i]=temp;
+		ra[i]=temp+'0';
 		temp=0;
 		i++;
 	}
@@ -131,6 +132,10 @@ void getrb(char*a,char*b)
 		}
 		rb[i]=now+'0';
 		i++;		
+	}
+	if(rb[i-1]=='0')
+	{
+		i--;
 	}
 	rb[i]='\0';
 }
@@ -207,7 +212,7 @@ void getrc(char*a,char*b)
 }
 char a[500];
 char b[500];
-int main()
+int q1()
 {
 	scanf("%s",a);
 	scanf("%s",b);
@@ -299,3 +304,62 @@ int main()
 	}
 	printf("%s\n",rc);
 } 
+#define MAX 99999
+int matrix[100][100];
+int min=MAX;
+int total(int x1,int y1,int x2,int y2)
+{
+	int r=0;
+	int i,j;
+	for(i=x1;i<=x2;i++)
+	{
+		for(j=y1;j<=y2;j++)
+		{
+			r+=matrix[i][j];
+		}
+	}
+	return r;
+}
+int main()
+{
+	int n,m,k;
+	int i,j,u,l;
+	int sizenow;
+	scanf("%d%d%d",&n,&m,&k);
+	for(i=0;i<n;i++)
+	{
+		for(j=0;j<m;j++)
+		{
+			scanf("%d",&matrix[i][j]);
+		}
+	}
+	for(i=0;i<n;i++)
+	{
+		for(j=0;j<m;j++)
+		{
+			for(u=i;u<n;u++)
+			{
+				for(l=j;l<m;l++)
+				{
+					sizenow=(l-j+1)*(u-i+1);
+					if(min<=sizenow)
+					{
+						break;
+					}
+					if(total(i,j,u,l)>=k)
+					{
+						min=sizenow;
+					}
+				}
+			}
+		}
+	}
+	if(min==MAX)
+	{
+		printf("-1");
+	}
+	else
+	{
+		printf("%d",min);
+	}
+}
